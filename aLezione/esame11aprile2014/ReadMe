@@ -1,0 +1,2 @@
+Ho creato gli esempi con file le cui righe iniziano per X
+Quindi anche il FCR.sh cerca '^X' ma tutto regolare

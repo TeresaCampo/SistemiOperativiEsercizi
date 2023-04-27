@@ -1,0 +1,26 @@
+#!/bin/sh
+
+#mi sposto nella cartella da contorllare
+cd $1
+
+#controllo se si tratta di un file, quante linee contiene e se contiene Cx
+#se corrisponde aggiorno il contatore e salvo il nome dei file nella variabile
+numeroFile=0
+nomeFile=
+numLinee=0
+
+for i in *
+do
+	if test -f $i
+	then
+	numLinee=`wc -l < $i`
+		if test $numLinee -eq $3
+		
+			then numeroFile=`expr $numeroFile + 1` 
+			nomeFile="$nomeFile $i"
+			
+		fi
+	fi
+done
+
+echo ho trovato $numeroFile
