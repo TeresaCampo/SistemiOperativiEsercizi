@@ -11,7 +11,7 @@ int piped[2][2];						//per contenere 2 pipe
 int fdFile;								//per contenere i fd dei parametri, quando li apro nei figli
 char letto;								//per contenter ultimo valore letto da un figlio
 char chPari, chDispari;					//per contenere i valori letti dalle due pipe
-int nrPari, nrDispari, tot=0;				//per contenere i numeri di valori letti dalle due pipe
+int nrPari, nrDispari, tot;				//per contenere i numeri di valori letti dalle due pipe
 int pidFiglio, status, ritorno;			//usati nella fork e nella wait
 
 //numero parametri: almeno 2 parametri
@@ -32,7 +32,6 @@ if(pipe(piped[1])<0){
 }
 
 //il processo padre crea N processi figli
-printf("Sono il processo padre con pid %d e sto per generare %d figli\n", getpid(), N);
 for(int i=0; i<N; ++i){
 	pidFiglio=fork();
 	if(pidFiglio<0){
@@ -55,7 +54,7 @@ for(int i=0; i<N; ++i){
 		if((i%2)==0){ 
 			close(piped[0][1]); 
 			//deve scrivere sulla pipe solo i caratteri alfabetici
-			while(read(fdFile, &letto, 1)==1){
+			while(read(fdFile, &letto, 1)){
 				if(isalpha(letto)!=0){
 				write(piped[1][1], &letto,1);}
 			}
@@ -63,11 +62,11 @@ for(int i=0; i<N; ++i){
 		else{ //file pari, quindi usa piped[0]
 			close(piped[1][1]);
 			//deve scrivere sulla pipe solo i caratteri numerici
-			while(read(fdFile, &letto, 1)==1){
-                if(isdigit(letto)!=0){
+			while(read(fdFile, &letto, 1)){
+                if(isalnum(letto)!=0){
                 write(piped[0][1], &letto,1);}
 			}         	
-		}
+			}
 		exit(letto);
 	}
 }
@@ -76,17 +75,18 @@ for(int i=0; i<N; ++i){
 close(piped[0][1]); close(piped[1][1]);
 nrPari=read(piped[0][0], &chPari, 1);
 nrDispari=read(piped[1][0], &chDispari, 1);
-while((nrPari!=0) || (nrDispari!=0)){
-	tot=tot+nrPari+nrDispari;
-	write(1 ,&chDispari, nrDispari);
-	write(1 ,&chPari, nrPari);
+while(nrPari!=0 || nrDispari!=0){
+	write(1 ,&chDispari, 1);
+	write(1 ,&chPari, 1);
 	nrPari=read(piped[0][0], &chPari, 1);
 	nrDispari=read(piped[1][0], &chDispari, 1);
+	tot=tot+nrPari+nrDispari;
 }
 printf("\nIl numero totale di caratteri scritti sullo standard output è %d\n", tot);
 
 //il padre aspetta i figli
 for(int i=0; i< N; ++i){
+	pidFiglio=wait(&status);
 	/* padre aspetta il figlio */
         if ((pidFiglio=wait(&status)) < 0)
         {
