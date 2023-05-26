@@ -37,7 +37,9 @@ if(fdCamilla<0){
 }
 
 //il padre crea N pipe
-pipedFp=malloc(Q*sizeof(pipe_t));
+if( (pipedFp=malloc(Q*sizeof(pipe_t)))==NULL){
+    printf("Errore: problemi allocazione memoria pipedFp");
+}
 for(int i=0; i<Q; ++i){
     if(pipe(pipedFp[i])<0){
         printf("Errore: problemi nella creazione della pipe\n");
