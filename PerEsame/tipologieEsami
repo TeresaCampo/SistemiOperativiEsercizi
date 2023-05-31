@@ -1,0 +1,10 @@
+->PIPELINE,scrivere su una struct e passarla: 9Set16
+->PIPELINE,array di linee: 14Lug21
+->RING, numero occorrenze in ogni riga: 13Lug22
+->SCANF/WRITE da input,sostituire un carattere di un file: 14Giu17
+->FIGLIO->PADRE, Camilla: 10Giu20
+
+STRANI
+->confronta file con diff: 8Giu22
+-> 1 blocco di un file, 1 blocco del file dopo (.mescolato): 19Gen22
+->max occorrenze, con struct: 22Gen16
